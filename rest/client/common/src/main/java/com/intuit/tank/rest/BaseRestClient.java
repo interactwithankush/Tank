@@ -30,10 +30,12 @@ import org.apache.logging.log4j.message.ObjectMessage;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.client.filter.EncodingFilter;
 import org.glassfish.jersey.client.spi.ConnectorProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.jersey.message.GZipEncoder;
 
 public abstract class BaseRestClient {
 
@@ -51,6 +53,9 @@ public abstract class BaseRestClient {
      */
     public BaseRestClient(String serviceUrl, final String proxyServer, final Integer proxyPort) {
         setBaseUrl(serviceUrl);
+        ClientBuilder builder = ClientBuilder.newBuilder()
+                .register(GZipEncoder.class)
+                .register(EncodingFilter.class);
         if (StringUtils.isNotEmpty(proxyServer)) {
         	ConnectorProvider connectorprovider = new HttpUrlConnectorProvider() {
                 private Proxy proxy;
@@ -65,12 +70,9 @@ public abstract class BaseRestClient {
                     return (HttpURLConnection) url.openConnection(proxy);
                 }
             };
-            client = ClientBuilder.newBuilder().register(connectorprovider).build();
-        } else {
-            client = ClientBuilder.newClient();
+            builder.register(connectorprovider);
         }
-//        client.setConnectTimeout(5000);
-//        client.setFollowRedirects(true);
+        client = builder.build();
         LOG.info(new ObjectMessage(ImmutableMap.of("Message", "client for url " + baseUrl + ": proxy="
                 + (proxyServer != null ? proxyServer + ":" + proxyPort : "none"))));
     }

@@ -30,6 +30,10 @@
   </modules>
 
   <dependencies>
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-multipart</artifactId>
+    </dependency>
     <!-- enunciate dependencies -->
     <dependency>
       <groupId>com.webcohesion.enunciate</groupId>

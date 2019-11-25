@@ -27,7 +27,6 @@
       </activation>
       <modules>
 	      <!--<module>jenkins_plugin</module>-->
-        <module>agent_debugger_pkg</module>
         <module>script_filter_pkg</module>
       </modules>
     </profile>

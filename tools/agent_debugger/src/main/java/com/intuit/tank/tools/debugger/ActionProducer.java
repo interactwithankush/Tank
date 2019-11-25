@@ -406,7 +406,8 @@ public class ActionProducer {
                                     setServiceUrl(url);
                                 } catch (Exception e) {
                                     showError("Cannot connect to Tank at the url " + url
-                                            + ". \nExample: http://tank.mysite.com/");
+                                            + ". \nExample: https://tank.mysite.com/");
+                                    throw(e);
                                 }
                             }
                         }
